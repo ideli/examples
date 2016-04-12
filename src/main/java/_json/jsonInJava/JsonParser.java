@@ -1,10 +1,10 @@
-package _json;
+package _json.jsonInJava;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
-public class LiteJsonParser {
+public class JsonParser {
 
 	public void parseJson() {
 		String strJson = "{\"id\":20130001,\"phone\":\"13579246810\",\"name\":\"Jason\"}";
