@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<!-- 
+	acquireIncrement: 当池中的连接用完,一次性创建连接的数目
+	acquireRetryAttempts: 从数据库获取新连接失败后重试次数,默认30
+	acquireRetryDelay: 尝试获取连接的间隔时间,单位毫秒,默认1000
+	autoCommitOnClose: 连接关闭时将所有未提交的操作回滚,默认false
+	automaticTestTable: 创建指定名称的空表用于测试,默认null不创建; 如果指定则忽略preferredTestQuery参数
+	breakAfterAcquireFailure: 如果设置为true,在尝试获取连接失败后将关闭数据源,默认false
+	checkoutTimeout: 连接池用完客户端等待获取新连接的时间,超时抛出SQLException,设为0则无限期等待; 单位毫秒,默认0
+	connectionTesterClassName: 自定义测试类,默认com.mchange.v2.c3p0.impl.DefaultConnectionTester
+	idleConnectionTestPeriod: 隔多少秒检查所有连接池中的空闲连接,默认为0不检查
+	initialPoolSize: 初始化时创建的连接数,默认3
+	maxIdleTime: 最大空闲时间,超过空闲时间的连接将被丢弃; 默认为0,永不丢弃
+	maxPoolSize: 最大连接数,默认15
+	maxStatements: 控制数据源内加载的PreparedStatement数量
+	maxStatementsPerConnection: 连接池内单个连接所拥有的最大缓存Statement数,默认0
+	如果maxStatements和maxStatementsPerConnection都为0则关闭缓存
+	numHelperThreads: 执行JDBC操作的线程数(C3P0异步执行),默认3
+	preferredTestQuery: 定义连接测试的SQL语句
+	propertyCycle: 用户修改系统配置参数前最多等待的秒数,默认300
+	testConnectionOnCheckout: 如果设置为true,在每个Connection提交时都校验有效性,影响性能(应通过idleConnectionTestPeriod校验连接,下同),默认false
+	testConnectionOnCheckin: 如果设置为true,在取得Connection时都校验有效性,影响性能,默认false
+	 -->
+	<bean id="c3p0DataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="net.sourceforge.jtds.jdbc.Driver" />
+		<property name="jdbcUrl"
+			value="jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=mybatis" />
+		<property name="user" value="LocojoyUser" />
+		<property name="password" value="LocojoyUser123" />
+		<property name="minPoolSize" value="10" />
+		<property name="maxPoolSize" value="100" />
+		<property name="initialPoolSize" value="10" />
+		<property name="maxIdleTime" value="1800" />
+		<property name="acquireIncrement" value="3" />
+		<property name="acquireRetryAttempts" value="30" />
+		<property name="acquireRetryDelay" value="1000" />
+		<property name="autoCommitOnClose" value="false" />
+		<property name="checkoutTimeout" value="5000" />
+		<property name="maxStatementsPerConnection" value="10" />
+		<property name="numHelperThreads" value="10" />
+		<property name="idleConnectionTestPeriod" value="600" />
+		<property name="preferredTestQuery" value="select 1" />
+	</bean>
+
+</beans>

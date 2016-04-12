@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="greetingBefore" class="_aop.step02.methodAdvice.GreetingBeforeAdvice" />
+	<bean id="greetingAfter" class="_aop.step02.methodAdvice.GreetingAfterAdvice" />
+	<bean id="target" class="_aop.step02.methodAdvice.NaiveWaiter" />
+	
+	<!-- proxyInterfaces指定代理的接口,多个用<list> -->
+	<!-- interceptorNames指定使用的增强 -->
+	<!-- target代理的目标对象 -->
+	<!-- optimize设置为true时强制使用Cglib技术 -->
+	<!-- singleton返回的代理是否是单例,默认是 -->
+	<!-- proxyTargetClass是否对类进行代理,设置为true时强制使用Cglib,无须再设置proxyInterfaces -->
+	<bean id="waiter1" class="org.springframework.aop.framework.ProxyFactoryBean"
+		p:target-ref="target"
+		p:optimize="true"
+		p:singleton="true"
+		p:proxyTargetClass="true">
+		<property name="interceptorNames">
+			<list>
+				<idref local="greetingBefore" />
+				<idref local="greetingAfter" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 环绕增强 -->
+	<bean id="greetingAround" class="_aop.step02.methodAdvice.GreetingInterceptor" />
+	<bean id="waiter2" class="org.springframework.aop.framework.ProxyFactoryBean"
+		p:target-ref="target"
+		p:interceptorNames="greetingAround"
+		p:optimize="true"
+		p:singleton="true"
+		p:proxyTargetClass="true" />
+</beans>

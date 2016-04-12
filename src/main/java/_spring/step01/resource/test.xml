@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <config type="main">
+      <application>redisdemo</application>
+   </config>
+   
+   <config type="tcp">
+      <ip>192.168.34.61</ip>
+      <port>18990</port>
+   </config>
+
+   <config type="database" name="JoyAdSDKConnect">
+      <driver>net.sourceforge.jtds.jdbc.Driver</driver>
+      <url>jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=LocojoyAdvertSDK</url>
+      <user>LocojoyUser</user>
+      <password>LocojoyUser123</password>
+      <!-- 以下为dbcp配置 -->
+      <initialSize>20</initialSize>
+      <maxTotal>-1</maxTotal>
+      <maxIdle>20</maxIdle>
+      <minIdle>10</minIdle>
+      <maxWaitMillis>2000</maxWaitMillis>
+   </config>
+   
+</root>

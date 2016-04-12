@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="waiterTarget" class="_aop.step06.dynamicMethodPointcut.Waiter" />
+	<bean id="sellerTarget" class="_aop.step06.dynamicMethodPointcut.Seller" />
+	<bean id="greetingBefore" class="_aop.step06.dynamicMethodPointcut.GreetingBeforeAdvice" />
+	
+	<!-- 动态切面配置 -->
+	<bean id="dynamicAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="pointcut">
+			<bean class="_aop.step06.dynamicMethodPointcut.GreetingDynamicPointcut" />
+		</property>
+		<property name="advice" ref="greetingBefore" />
+	</bean>
+	<bean id="waiter2" class="org.springframework.aop.framework.ProxyFactoryBean"
+		p:target-ref="waiterTarget"
+		p:interceptorNames="dynamicAdvisor"
+		p:proxyTargetClass="true" />
+</beans>

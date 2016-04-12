@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- monitorInterval 每个X秒从新读取配置文件 -->
+<Configuration status="WARN" monitorInterval="1800">
+	<!-- 自定义属性,无规则,仅方便后面使用 -->
+	<properties>
+		<property name="LOG_HOME">D:/Logs</property>
+		<property name="FILE_NAME">mylog</property>
+	</properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<!-- RollingRandomAccessFile以文件方式记录 -->
+		<!-- filePattern与 SizeBasedTriggeringPolicy结合使用,当达到容量限制时生成新文件 -->
+		<!-- DefaultRolloverStrategy备份文件最多保留个数 -->
+		<RollingRandomAccessFile name="MyFile"
+			fileName="${LOG_HOME}/${FILE_NAME}.log" immediateFlush="false"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd HH-mm}-%i.log">
+			<PatternLayout
+				pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20" />
+		</RollingRandomAccessFile>
+		<Async name="Async">
+			<AppenderRef ref="MyFile" />
+		</Async>
+	</Appenders>
+
+	<Loggers>
+		<!-- Root是当前Logger的父亲,如果additivity设置为true,信息会传播到Root Logger -->
+		<Logger name="mylog" level="trace" additivity="true">
+			<AppenderRef ref="MyFile" />
+		</Logger>
+		<Logger name="asynclog" level="trace" additivity="false" >
+			<AppenderRef ref="Async" />
+		</Logger>
+		<Root level="error">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>

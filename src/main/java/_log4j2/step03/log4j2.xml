@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- monitorInterval 每个X秒从新读取配置文件 -->
+<Configuration status="WARN" monitorInterval="1800">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<NoSql name="databaseAppender">
+			<MongoDb databaseName="test" collectionName="errorLog"
+				server="localhost" port="27017" />
+		</NoSql>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="mongolog" level="trace" additivity="true">
+			<AppenderRef ref="databaseAppender" />
+		</Logger>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>
