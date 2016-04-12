@@ -29,7 +29,8 @@ public class Client {
 		Scheduler sched = sf.getScheduler();
 
 		sched.scheduleJob(jobDetail, trigger);
-		System.out.println(jobDetail.getKey() + " will run at: " + runTime);
+		//System.out.println(jobDetail.getKey() + " will run at: " + runTime);
+		logger.info(jobDetail.getKey() + " will run at: " + runTime);
 		sched.start();
 
 		try {
@@ -40,7 +41,7 @@ public class Client {
 		}
 
 		// shut down the scheduler
-		System.out.println("------- Shutting Down ---------------------");
+		logger.info("------- Shutting Down ---------------------");
 		sched.shutdown(true);
 	}
 }
