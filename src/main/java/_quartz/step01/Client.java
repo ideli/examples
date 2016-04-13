@@ -1,5 +1,6 @@
 package _quartz.step01;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.logging.log4j.Logger;
@@ -30,7 +31,7 @@ public class Client {
 
 		sched.scheduleJob(jobDetail, trigger);
 		//System.out.println(jobDetail.getKey() + " will run at: " + runTime);
-		logger.info(jobDetail.getKey() + " will run at: " + runTime);
+		logger.info(jobDetail.getKey() + " will run at: " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(runTime));
 		sched.start();
 
 		try {
