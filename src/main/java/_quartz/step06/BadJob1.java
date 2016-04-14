@@ -25,6 +25,7 @@ public class BadJob1 implements Job {
 
 	// Logging
 	Logger _log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
+	@SuppressWarnings("unused")
 	private int calculation;
 
 	/**

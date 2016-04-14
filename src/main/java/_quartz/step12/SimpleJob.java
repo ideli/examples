@@ -1,28 +1,30 @@
-package _quartz.step02;
+package _quartz.step12;
 
-import org.apache.logging.log4j.Logger;
+import java.util.Date;
+
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 
-import _basic.utils.LocaleDate;
-
 /**
  * <p>
- * This is just a simple job that gets fired off many times by example 1
+ * A dumb implementation of Job, for unittesting purposes.
  * </p>
  * 
- * @author Bill Kratzer
+ * @author James House
  */
 public class SimpleJob implements Job {
 
-	private static Logger _log = LogManager
-			.getLogger(LogManager.ROOT_LOGGER_NAME);
+	public static final String MESSAGE = "msg";
+
+	static Logger _log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
 	/**
-	 * Empty constructor for job initialization
+	 * Quartz requires a public empty constructor so that the scheduler can
+	 * instantiate the class whenever it needs.
 	 */
 	public SimpleJob() {
 	}
@@ -43,8 +45,12 @@ public class SimpleJob implements Job {
 		// This job simply prints out its job name and the
 		// date and time that it is running
 		JobKey jobKey = context.getJobDetail().getKey();
-		_log.info("SimpleJob says: " + jobKey + " executing at "
-				+ new LocaleDate());
+
+		String message = (String) context.getJobDetail().getJobDataMap()
+				.get(MESSAGE);
+
+		_log.info("SimpleJob: " + jobKey + " executing at " + new Date());
+		_log.info("SimpleJob: msg: " + message);
 	}
 
 }

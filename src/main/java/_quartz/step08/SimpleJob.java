@@ -1,13 +1,13 @@
-package _quartz.step02;
+package _quartz.step08;
 
-import org.apache.logging.log4j.Logger;
+import java.util.Date;
+
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
-
-import _basic.utils.LocaleDate;
 
 /**
  * <p>
@@ -18,8 +18,7 @@ import _basic.utils.LocaleDate;
  */
 public class SimpleJob implements Job {
 
-	private static Logger _log = LogManager
-			.getLogger(LogManager.ROOT_LOGGER_NAME);
+	static Logger _log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
 	/**
 	 * Empty constructor for job initialization
@@ -43,8 +42,7 @@ public class SimpleJob implements Job {
 		// This job simply prints out its job name and the
 		// date and time that it is running
 		JobKey jobKey = context.getJobDetail().getKey();
-		_log.info("SimpleJob says: " + jobKey + " executing at "
-				+ new LocaleDate());
+		_log.info("SimpleJob says: " + jobKey + " executing at " + new Date());
 	}
 
 }

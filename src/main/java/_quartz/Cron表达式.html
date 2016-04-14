@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Cron表达式</title>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<style type="text/css">
+<!--
+td {
+	font-family: "Arial", "Helvetica", "sans-serif";
+	font-size: 14px;
+	height: 25px;
+}
+.my-table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+}
+.my-table td {
+    border: 1px solid #ccc;
+}
+    .auto-style1
+    {
+        height: 25px;
+    }
+-->
+</style>
+</head>
+
+<body>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td><p><a name="TOP"></a></p>
+      <table width="100%" border="0" class="my-table">
+        <tr>
+          <td style="width: 80px">位置</td>
+          <td style="width: 100px">时间域</td>
+          <td style="width: 150px">允许值</td>
+          <td>允许的特殊字符</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>秒</td>
+          <td>0-59</td>
+          <td>, - * /</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>分钟</td>
+          <td>0-59</td>
+          <td>, - * /</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>小时</td>
+          <td>0-23</td>
+          <td>, - * /</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>日期</td>
+          <td>1-31</td>
+          <td>, - * ? / L W C</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>月份</td>
+          <td>1-12</td>
+          <td>, - * /</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>星期</td>
+          <td>1-7</td>
+          <td>, - * ? / L C #</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>年(可选)</td>
+          <td>空值或1970-2099</td>
+          <td>, - * /</td>
+        </tr>
+      </table>
+      <br />
+      <table width="100%" border="0" class="my-table">
+        <tr>
+          <td style="width: 80px">符号</td>
+          <td>说明</td>
+        </tr>
+        <tr>
+          <td>*</td>
+          <td>可用于所有字段, 表示对应时间域的每一时刻, 如*在分钟字段表示每分钟</td>
+        </tr>
+        <tr>
+          <td>?</td>
+          <td>只在日期和星期字段使用, 表示无意义的值, 即占位符</td>
+        </tr>
+        <tr>
+          <td>-</td>
+          <td>表示一个范围, 如在小时字段使用10-12, 表示从10点到12点</td>
+        </tr>
+        <tr>
+          <td>,</td>
+          <td>&nbsp;表示一个列表值, 如10,11,12</td>
+        </tr>
+        <tr>
+          <td>/</td>
+          <td>X/Y表达一个等步长序列, X为起始值, Y为增量步长值; 如在分钟字段使用0/15则表示0,15,30,45; 5/15表示5,20,35,50</td>
+        </tr>
+        <tr>
+          <td class="auto-style1">L</td>
+          <td class="auto-style1">在日期字段, 表示这个月的最后一天<br />
+              在星期字段, 表示星期六; 如果前面有数字X, 表示该月的最后一个星期X(注意星期日是1, 例如6L表示最后一个星期五)</td>
+        </tr>
+        <tr>
+          <td>W</td>
+          <td>用在日期字段, 前面必须有数字X, 表示离该月X日最近的一个工作日, 例如15W表示离15日最近的工作日(如果15日是星期二, 对应15; 如果15日是星期六, 对应14; 如果15日是星期日, 对应16)</td>
+        </tr>
+        <tr>
+          <td>LW</td>
+          <td>表示当月最后一个工作日</td>
+        </tr>
+        <tr>
+          <td>#</td>
+          <td>只能在星期字段使用 X#Y表示当月第Y个星期X(注意星期日是1), 例如6#3表示第三个星期五; 如果当月没有匹配日志, 不触发<br />
+            </td>
+        </tr>
+        <tr>
+          <td>C</td>
+          <td>在日期字段, 如果前面有数字X, 表示X日后的第一天, 如果没有数字表示日历中的所有日期; 如5C表示5日后的第一天<br />
+              在星期字段, 如果前面有数字X, 表示星期X后的第一天; 如1C表示星期日后的第一天</td>
+        </tr>
+      </table>
+      <br />
+      <table width="100%" border="0" class="my-table">
+        <tr>
+          <td style="width: 200px">示例</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>0 0 12 * * ?</td>
+          <td>每天12点运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 ? * *</td>
+          <td>每天10:15运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 * * ?</td>
+          <td>每天10:15运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 * * ? *</td>
+          <td>&nbsp;每天10:15运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 * * ? 2016</td>
+          <td>2016年的每天10:15运行</td>
+        </tr>
+        <tr>
+          <td class="auto-style1">0 * 14 * * ?</td>
+          <td class="auto-style1">每天14:00-14:59, 每分钟运行一次</td>
+        </tr>
+        <tr>
+          <td>0 0/5 14 * * ?</td>
+          <td>每天14:00-14:59, 每5分钟运行一次</td>
+        </tr>
+        <tr>
+          <td>0 0/5 14,18 * * ?</td>
+          <td>每天14:00-14:59和18:00-18:59, 每5分钟运行一次</td>
+        </tr>
+        <tr>
+          <td>0 0-5 14 * * ?</td>
+          <td>每天14:00-14:05, 每分钟运行一次<br />
+            </td>
+        </tr>
+        <tr>
+          <td>0 10-44 14 ? 3 WED</td>
+          <td>3月每周3的14:10-14:44, 每分钟运行一次</td>
+        </tr>
+        <tr>
+          <td>0 15 10 ? * MON-FRI</td>
+          <td>每周1-5的10:15运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 15 * ?</td>
+          <td>每月15日10:15运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 L * ?</td>
+          <td>每月最后一天10:15运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 ? * 6L</td>
+          <td>每月最后一个星期五10:15运行</td>
+        </tr>
+        <tr>
+          <td>0 15 10 ? * 6#3</td>
+          <td>每月第三个星期五10:15运行</td>
+        </tr>
+      </table>
+      </td>
+  </tr>
+</table>
+</body>
+</html>

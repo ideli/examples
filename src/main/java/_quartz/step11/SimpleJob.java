@@ -1,13 +1,13 @@
-package _quartz.step02;
+package _quartz.step11;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 
-import _basic.utils.LocaleDate;
+import java.util.Date;
 
 /**
  * <p>
@@ -18,11 +18,13 @@ import _basic.utils.LocaleDate;
  */
 public class SimpleJob implements Job {
 
-	private static Logger _log = LogManager
-			.getLogger(LogManager.ROOT_LOGGER_NAME);
+	static Logger _log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
+
+	// job parameter
+	public static final String DELAY_TIME = "delay time";
 
 	/**
-	 * Empty constructor for job initialization
+	 * Empty constructor for job initilization
 	 */
 	public SimpleJob() {
 	}
@@ -43,8 +45,18 @@ public class SimpleJob implements Job {
 		// This job simply prints out its job name and the
 		// date and time that it is running
 		JobKey jobKey = context.getJobDetail().getKey();
-		_log.info("SimpleJob says: " + jobKey + " executing at "
-				+ new LocaleDate());
+		_log.info("Executing job: " + jobKey + " executing at " + new Date());
+
+		// wait for a period of time
+		long delayTime = context.getJobDetail().getJobDataMap()
+				.getLong(DELAY_TIME);
+		try {
+			Thread.sleep(delayTime);
+		} catch (Exception e) {
+			//
+		}
+
+		_log.info("Finished Executing job: " + jobKey + " at " + new Date());
 	}
 
 }

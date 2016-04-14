@@ -1,13 +1,14 @@
-package _quartz.step02;
+package _quartz.step10;
 
-import org.apache.logging.log4j.Logger;
+import java.util.Date;
+import java.util.Set;
+
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
-
-import _basic.utils.LocaleDate;
 
 /**
  * <p>
@@ -18,11 +19,10 @@ import _basic.utils.LocaleDate;
  */
 public class SimpleJob implements Job {
 
-	private static Logger _log = LogManager
-			.getLogger(LogManager.ROOT_LOGGER_NAME);
+	static Logger _log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
 	/**
-	 * Empty constructor for job initialization
+	 * Empty constructor for job initilization
 	 */
 	public SimpleJob() {
 	}
@@ -43,8 +43,18 @@ public class SimpleJob implements Job {
 		// This job simply prints out its job name and the
 		// date and time that it is running
 		JobKey jobKey = context.getJobDetail().getKey();
-		_log.info("SimpleJob says: " + jobKey + " executing at "
-				+ new LocaleDate());
+		_log.info("Executing job: " + jobKey + " executing at " + new Date()
+				+ ", fired by: " + context.getTrigger().getKey());
+
+		if (context.getMergedJobDataMap().size() > 0) {
+			Set<String> keys = context.getMergedJobDataMap().keySet();
+			for (String key : keys) {
+				String val = context.getMergedJobDataMap().getString(key);
+				_log.info(" - jobDataMap entry: " + key + " = " + val);
+			}
+		}
+
+		context.setResult("hello");
 	}
 
 }
