@@ -18,7 +18,7 @@ public class PlaneDao {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	public void createTable() {
-		String sql = "create table t_plane(plane_id int not null,plane_name varchar(50),PRIMARY_KEY(plane_id))";
+		String sql = "create table t_plane(plane_id int not null,plane_name varchar(50),PRIMARY KEY(plane_id))";
 		jdbcTemplate.execute(sql);
 	}
 	
