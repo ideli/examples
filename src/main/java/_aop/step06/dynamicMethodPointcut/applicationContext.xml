@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<bean id="beforeAdvice" class="_aop.step05.staticMethodPointcut.BeforeAdvice" />
+	<bean id="horsemanTarget" class="_aop.step05.staticMethodPointcut.Horseman" />
+	<bean id="swordmanTarget" class="_aop.step05.staticMethodPointcut.Swordman" />
+	<bean id="pointcut" class="_aop.step06.dynamicMethodPointcut.DynamicStoragePointcut"
+		p:methodOption="1"
+		p:classOption="0" />
+	<bean id="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor"
+		p:advice-ref="beforeAdvice"
+		p:pointcut-ref="pointcut" />
+	
+	<bean id="horseman" class="org.springframework.aop.framework.ProxyFactoryBean"
+		p:target-ref="horsemanTarget"
+		p:interceptorNames="advisor"
+		p:proxyTargetClass="true" />
+	<bean id="swordman" class="org.springframework.aop.framework.ProxyFactoryBean"
+		p:target-ref="swordmanTarget"
+		p:interceptorNames="advisor"
+		p:proxyTargetClass="true" />
+</beans>
