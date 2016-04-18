@@ -23,7 +23,9 @@ public class PlaneDao {
 	}
 	
 	public void createIdTable() {
-		String sql = "create table t_plane_id(seq_id int) ENGINE=MYISAM;insert into t_plane_id values(0);";
+		String sql = "create table t_plane_id(seq_id int) ENGINE=MYISAM;";
+		jdbcTemplate.execute(sql);
+		sql = "insert into t_plane_id(seq_id) values(0);";
 		jdbcTemplate.execute(sql);
 	}
 	
