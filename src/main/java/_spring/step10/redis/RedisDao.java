@@ -1,5 +1,7 @@
 package _spring.step10.redis;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -25,6 +27,8 @@ public class RedisDao {
 	
 	public void addOrUpdate(String key, String value) {
 		this.redisTemplate.opsForValue().set(key, value);
+		//设置有效期
+		this.redisTemplate.opsForValue().set(key, value, 60, TimeUnit.SECONDS);
 	}
 	
 	public String load(String key) {
