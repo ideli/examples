@@ -30,7 +30,7 @@ public class CarDao {
 	final String SELECT_SQL = "select * from t_car where car_id=?";
 	
 	public void createTable() {
-		String sql = "create table t_car(car_id int not null AUTO_INCREMENT,car_name varchar(50),car_price float,PRIMARY_KEY(car_id))";
+		String sql = "create table t_car(car_id int not null AUTO_INCREMENT,car_name varchar(50),car_price float,PRIMARY KEY(car_id)) default charset=utf8";
 		jdbcTemplate.execute(sql);
 	}
 	

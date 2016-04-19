@@ -18,12 +18,14 @@ public class PlaneDao {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	public void createTable() {
-		String sql = "create table t_plane(plane_id int not null,plane_name varchar(50),PRIMARY_KEY(plane_id))";
+		String sql = "create table t_plane(plane_id int not null,plane_name varchar(50),PRIMARY KEY(plane_id))";
 		jdbcTemplate.execute(sql);
 	}
 	
 	public void createIdTable() {
-		String sql = "create table t_plane_id(seq_id int) type=MYISAM;insert into t_plane_id values(0);";
+		String sql = "create table t_plane_id(seq_id int) ENGINE=MYISAM;";
+		jdbcTemplate.execute(sql);
+		sql = "insert into t_plane_id(seq_id) values(0);";
 		jdbcTemplate.execute(sql);
 	}
 	
