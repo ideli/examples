@@ -1,6 +1,7 @@
 package _spring.test;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
 
 import java.util.HashMap;
 
@@ -16,6 +17,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+/**
+ * 单元测试 -> 集成测试 -> 功能测试 -> 系统测试
+ *
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:spring-test.xml")
 public class ExampleTest extends AbstractJUnit4SpringContextTests {
@@ -44,6 +49,32 @@ public class ExampleTest extends AbstractJUnit4SpringContextTests {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	//断言assertThat
+	@Test
+	public void testAssertThat() {
+		//assertThat(T actual, Matcher matcher)  actual - 想要验证的值,matcher - Hamcrest表达式
+		int x = 50;
+		assertThat(x, greaterThan(20));
+		assertThat(x, greaterThanOrEqualTo(50));
+		assertThat(x, lessThan(80));
+		assertThat(x, lessThanOrEqualTo(50));
+		assertThat(x, is(50));
+		assertThat(x, not(100));
+		//所有条件都必须成立
+		assertThat(x, allOf(greaterThan(20), lessThan(80)));
+		//只要有一个条件成功
+		assertThat(x, anyOf(greaterThan(80), lessThan(80)));
+		//无论什么条件测试都通过
+		assertThat(x, anything());
+		
+		assertThat(testString, containsString("test"));
+		assertThat(testString, startsWith("test"));
+		assertThat(testString, endsWith("ing"));
+		assertThat(testString, equalTo("test string"));
+		assertThat(testString, equalToIgnoringCase("Test String"));
+		assertThat(testString, equalToIgnoringWhiteSpace(" test string "));
 	}
 	
 	//只可以出现一次, 在所有测试方法前执行
