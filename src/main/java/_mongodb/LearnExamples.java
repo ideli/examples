@@ -6,7 +6,9 @@ import java.util.Arrays;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import com.mongodb.Block;
 import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.PushOptions;
@@ -20,7 +22,7 @@ public class LearnExamples {
 		MongoDatabase database = mongoClient.getDatabase("lesson");
 		
 		LearnExamples client = new LearnExamples(database);
-		client.insertAndUpdate();
+		client.find();
 		mongoClient.close();
 	}
 	
@@ -131,5 +133,57 @@ public class LearnExamples {
 		//combine
 		bson = combine(set("author", "James Gosling"), set("version", "2016"));
 		database.getCollection("language").updateOne(new Document("oop", "java"), bson);
+	}
+	
+	public void find() {
+		database.getCollection("fruits").drop();
+		Document doc1 = new Document("name", "apple").append("color", "red").append("price", 10.0);
+		Document doc2 = new Document("name", "orange").append("color", "orange").append("price", 7.99);
+		Document doc3 = new Document("name", "banana").append("color", "yellow").append("price", 2.99);
+		Document doc4 = new Document("name", "strawberry").append("color", "red").append("price", 14.99);
+		database.getCollection("fruits").insertMany(Arrays.asList(doc1, doc2, doc3, doc4));
+		
+		System.out.println("find()-----------------------");
+		FindIterable<Document> iterable = database.getCollection("fruits").find();
+        iterable.forEach(new Block<Document>() {
+            public void apply(final Document document) {
+                System.out.println(document);
+            }
+        });
+        
+        System.out.println("find(new Document(\"color\", \"red\"))-----------------------");
+        iterable = database.getCollection("fruits").find(new Document("color", "red"));
+        iterable.forEach(new Block<Document>() {
+            public void apply(final Document document) {
+                System.out.println(document);
+            }
+        });
+        
+        System.out.println("find(new Document(\"color\", \"red\").append(\"name\", \"strawberry\"))-----------------------");
+        iterable = database.getCollection("fruits").find(new Document("color", "red").append("name", "strawberry"));
+        iterable.forEach(new Block<Document>() {
+            public void apply(final Document document) {
+                System.out.println(document);
+            }
+        });
+        
+        //$or $in $nin
+        //$not
+        //$lt $lte $gt $gte $ne
+        System.out.println("find(new Document(\"$or\", Arrays.asList(new Document(\"color\", \"red\"), new Document(\"price\", new Document(\"$gt\", 8)))))-----------------------");
+        iterable = database.getCollection("fruits").find(new Document("$or", Arrays.asList(new Document("color", "red"), new Document("price", new Document("$gt", 8)))));
+        iterable.forEach(new Block<Document>() {
+            public void apply(final Document document) {
+                System.out.println(document);
+            }
+        });
+        
+        System.out.println("find(Filters.eq(\"color\", \"red\"))-----------------------");
+        iterable = database.getCollection("fruits").find(Filters.eq("color", "red"));
+        iterable.forEach(new Block<Document>() {
+            public void apply(final Document document) {
+                System.out.println(document);
+            }
+        });
 	}
 }
