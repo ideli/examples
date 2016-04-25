@@ -15,13 +15,13 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class Client {
+public class OfficialExamples {
 
 	public static void main(String[] args) throws ParseException {
 		MongoClient mongoClient = new MongoClient("localhost", 27017);
 		MongoDatabase database = mongoClient.getDatabase("test");
 		
-		Client client = new Client(database);
+		OfficialExamples client = new OfficialExamples(database);
 		client.insert(database);
 		client.createSingleFieldIndex();
 		client.queryAll();
@@ -29,7 +29,7 @@ public class Client {
 	}
 	
 	private MongoDatabase database;
-	public Client(MongoDatabase database) {
+	public OfficialExamples(MongoDatabase database) {
 		this.database = database;
 	}
 
