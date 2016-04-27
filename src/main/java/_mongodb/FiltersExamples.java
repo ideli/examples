@@ -3,6 +3,7 @@ package _mongodb;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import org.bson.BsonType;
 import org.bson.Document;
 
 import com.mongodb.Block;
@@ -10,6 +11,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+
 import static com.mongodb.client.model.Filters.*;
 
 public class FiltersExamples {
@@ -35,7 +37,7 @@ public class FiltersExamples {
 		Document doc1 = new Document("name", "apple").append("color", "red").append("price", 3.0).append("size", Arrays.asList(1, 2, 3, 4));
 		Document doc2 = new Document("name", "orange").append("color", "orange").append("price", 7.99).append("size", Arrays.asList(2, 3, 4, 5));
 		Document doc3 = new Document("name", "banana").append("color", "yellow").append("price", 2.99).append("size", Arrays.asList(3, 4));
-		Document doc4 = new Document("name", "strawberry").append("color", "red").append("price", 14.99).append("size", Arrays.asList(4, 5, 6, 7));
+		Document doc4 = new Document("name", "strawberry").append("color", "red").append("price", 14.99).append("size", Arrays.asList(4, 2, 3, 1));
 		mc.insertMany(Arrays.asList(doc1, doc2, doc3, doc4));
 		
 		//$or $in $nin
@@ -59,8 +61,27 @@ public class FiltersExamples {
 		iterable = mc.find(and(or(eq("price", 3.0), eq("price", 7.99)), or(eq("color", "yellow"), lt("price", 14))));
 		printResult("Filters (price=3.0 or price=7.99) and (color=yellow or price<14)", iterable);
 		
+		iterable = mc.find(eq("size.1", 2));
+		printResult("Filters size.1 eq 2", iterable);
+		
 		iterable = mc.find(all("size", Arrays.asList(2, 3, 4)));
-		printResult("Filters size all (2, 3, 4)", iterable);
+		printResult("Filters size all (3, 2, 4)", iterable);
+		
+		iterable = mc.find(size("size", 2));
+		printResult("Filters size size 2", iterable);
+		
+		//$elemMatch 搜索内嵌文档 todo
+		
+		iterable = mc.find(exists("color"));
+		printResult("Filters exists color", iterable);
+		
+		iterable = mc.find(type("price", BsonType.DOUBLE));
+		printResult("Filters type price is double", iterable);
+		
+		//$mod 取模 todo
+		//$regex 匹配正则表达式
+		//$text 全文搜索
+		//$where js表达式
 	}
 	
 	public void printResult(String doing, FindIterable<Document> iterable) {
