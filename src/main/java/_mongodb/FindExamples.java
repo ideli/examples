@@ -10,6 +10,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Projections.*;
+import static com.mongodb.client.model.Sorts.*;
 
 public class FindExamples {
 
@@ -40,7 +42,7 @@ public class FindExamples {
 		mc.createIndex(new Document("price", 1));
 		mc.createIndex(new Document("color", 1).append("name", -1));
 		
-		FindIterable<Document> iterable = mc.find();
+		FindIterable<Document> iterable = mc.find().sort(ascending("name"));
 		printResult("find all", iterable);
         
         iterable = mc.find(new Document("color", "red"));
@@ -49,9 +51,11 @@ public class FindExamples {
         iterable = mc.find(new Document("color", "red").append("name", "strawberry"));
         printResult("find color:red and name:strawberry", iterable);
         
-        System.out.println("find(new Document(\"$or\", Arrays.asList(new Document(\"color\", \"red\"), new Document(\"price\", new Document(\"$gt\", 8)))))-----------------------");
         iterable = mc.find(new Document("$or", Arrays.asList(new Document("color", "red"), new Document("price", new Document("$gt", 8)))));
         printResult("find color:red or price>8", iterable);
+        
+        iterable = mc.find(include("apple"));
+        printResult("find include(\"color\")", iterable);
 	}
 	
 	public void printResult(String doing, FindIterable<Document> iterable) {
