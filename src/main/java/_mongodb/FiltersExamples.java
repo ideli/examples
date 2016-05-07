@@ -70,17 +70,14 @@ public class FiltersExamples {
 		iterable = mc.find(size("size", 2));
 		printResult("Filters size size 2", iterable);
 		
-		//$elemMatch 搜索内嵌文档 todo
-		
 		iterable = mc.find(exists("color"));
 		printResult("Filters exists color", iterable);
 		
 		iterable = mc.find(type("price", BsonType.DOUBLE));
 		printResult("Filters type price is double", iterable);
 		
-		//$mod 取模 todo
-		//$regex 匹配正则表达式
 		//$text 全文搜索
+		//$mod 取模
 		//$where js表达式
 	}
 	

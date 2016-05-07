@@ -12,6 +12,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
+import static com.mongodb.client.model.Filters.text;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Sorts.*;
 
@@ -47,6 +48,8 @@ public class FindExamples {
 		mc.createIndex(new Document("words", 1));
 		//组合索引
 		mc.createIndex(new Document("title", 1).append("author", -1));
+		//创建全文索引
+		mc.createIndex(new Document("title", "text"));
 		
 		//查询全部
 		FindIterable<Document> iterable = mc.find();
@@ -104,8 +107,12 @@ public class FindExamples {
         iterable = mc.find(elemMatch("comments", Filters.and(Filters.eq("author", "white"), Filters.gt("score", 2))));
         printResult("find comments.author=white and comments.score>2 using elemMatch", iterable);
         
+        //查找title以good开头的, 并且comments只保留一个元素
         iterable = mc.find(Filters.regex("title", "^good")).projection(slice("comments", 1));
-        printResult("find all excludeId", iterable);
+        printResult("find regex ^good and slice comments 1", iterable);
+        
+        iterable = mc.find(text("good"));
+		printResult("text good", iterable);
 	}
 	
 	public void printResult(String doing, FindIterable<Document> iterable) {
