@@ -45,9 +45,9 @@ public class AggregatesExamples {
 		Document doc5 = new Document("title", "a good thing").append("author", "tom").append("words", 180);
 		mc.insertMany(Arrays.asList(doc1, doc2, doc3, doc4, doc5));
 		
-		//类似于select author,sum(words) as totalWords,avg(words) as agerageWords from blog where author='tom' group by author
+		//类似于select author,sum(words) as totalWords,avg(words) as agerageWords into wordsCount from blog where author='tom' group by author
 		AggregateIterable<Document> iterable = mc.aggregate(Arrays.asList(match(eq("author", "tom")),
-                group("$author", sum("totalWords", "$words"), avg("averageWords", "$words"), max("maxWords", "$words"), min("minWords", "$words"))));
+                group("$author", sum("totalWords", "$words"), avg("averageWords", "$words"), max("maxWords", "$words"), min("minWords", "$words")), out("$wordsCount")));
 		printResult("group by author", iterable);
 		
 		//随机取3个文档, 仅返回title和author字段
