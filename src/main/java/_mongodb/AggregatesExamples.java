@@ -62,6 +62,8 @@ public class AggregatesExamples {
 		iterable = mc.aggregate(Arrays.asList(match(size("comments", 2)), project(fields(include("comments"), excludeId())), unwind("$comments")));
 		printResult("unwind comments", iterable);
 		
+		//$count
+		//$distinct
 	}
 	
 	public void printResult(String doing, AggregateIterable<Document> iterable) {
