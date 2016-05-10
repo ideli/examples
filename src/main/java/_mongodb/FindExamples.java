@@ -37,7 +37,7 @@ public class FindExamples {
 		MongoDatabase database = mongoClient.getDatabase("lesson");
 		
 		FindExamples client = new FindExamples(database);
-		client.beginShow();
+		client.show();
 		mongoClient.close();
 	}
 	
@@ -46,7 +46,7 @@ public class FindExamples {
 		this.database = database;
 	}
 	
-	public void beginShow() {
+	public void show() {
 
 		MongoCollection<Document> mc = database.getCollection("blog");
 		mc.drop();
@@ -62,9 +62,9 @@ public class FindExamples {
 		Document doc5 = new Document("title", "a good thing").append("owner", "tom").append("words", 180)
 				.append("tag", Arrays.asList(1, 2, 3, 4, 5));
 		mc.insertMany(Arrays.asList(doc1, doc2, doc3, doc4, doc5));
-		//单字段索引
+		//创建单字段索引
 		mc.createIndex(new Document("words", 1));
-		//组合索引
+		//创建组合索引(同样遵循最左前缀原则)
 		mc.createIndex(new Document("title", 1).append("owner", -1));
 		//创建全文索引
 		mc.createIndex(new Document("title", "text"));
