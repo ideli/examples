@@ -8,8 +8,11 @@ import org.bson.Document;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.DistinctIterable;
+import com.mongodb.client.MapReduceIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
@@ -47,23 +50,57 @@ public class AggregatesExamples {
 		
 		//类似于select author,sum(words) as totalWords,avg(words) as agerageWords into wordsCount from blog where author='tom' group by author
 		AggregateIterable<Document> iterable = mc.aggregate(Arrays.asList(match(eq("author", "tom")),
-                group("$author", sum("totalWords", "$words"), avg("averageWords", "$words"), max("maxWords", "$words"), min("minWords", "$words")), out("$wordsCount")));
+                group("$author", sum("totalWords", "$words"), avg("averageWords", "$words"), max("maxWords", "$words"), min("minWords", "$words")), out("wordsCount")));
 		printResult("group by author", iterable);
 		
 		//随机取3个文档, 仅返回title和author字段
-		iterable = mc.aggregate(Arrays.asList(sample(3), project(fields(include("title", "author"), excludeId()))));
+		iterable = mc.aggregate(Arrays.asList(sample(3), project(fields(include("title", "author"), excludeId())), out("sample3")));
 		printResult("sample(3)", iterable);
 		
 		//从第2个文档开始取2个文档, 仅返回title和author字段
 		iterable = mc.aggregate(Arrays.asList(skip(1), limit(2), project(fields(include("title", "author"), excludeId()))));
 		printResult("skip(1), limit(2)", iterable);
 		
+		database.getCollection("scores").drop();
+		database.getCollection("scores").insertMany(Arrays.asList(new Document("writer", "tom").append("score", 100), new Document("writer", "joe").append("score", 95), new Document("writer", "john").append("score", 80)));
+		
+		iterable = mc.aggregate(Arrays.asList(lookup("scores", "author", "writer", "joinedOutput")));
+		printResult("lookup", iterable);
+		
 		//拆分comments为单个文档
 		iterable = mc.aggregate(Arrays.asList(match(size("comments", 2)), project(fields(include("comments"), excludeId())), unwind("$comments")));
 		printResult("unwind comments", iterable);
 		
-		//$count
-		//$distinct
+		DistinctIterable<String> it = mc.distinct("author", String.class);
+		it.forEach(new Block<String>() {
+            public void apply(final String str) {
+                System.out.println(str);
+            }
+        });
+		
+		long count = mc.count(Filters.eq("author", "tom"));
+		System.out.println("count=" + count);
+		
+		String map = "function() { "+   
+	             "var category; " +    
+	             "if ( this.words >= 250 ) "+    
+	             "category = 'Long blogs'; " +  
+	             "else " +  
+	             "category = 'Short blogs'; "+    
+	             "emit(category, {title: this.title});}";  
+	     
+	   String reduce = "function(key, values) { " +  
+	                            "var sum = 0; " +  
+	                            "values.forEach(function(doc) { " +  
+	                            "sum += 1; "+  
+	                            "}); " +  
+	                            "return {blogs: sum};} ";
+	   MapReduceIterable<Document> mi = mc.mapReduce(map, reduce);
+	   mi.forEach(new Block<Document>() {
+           public void apply(final Document str) {
+               System.out.println(str);
+           }
+       });
 	}
 	
 	public void printResult(String doing, AggregateIterable<Document> iterable) {
