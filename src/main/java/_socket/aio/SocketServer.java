@@ -117,20 +117,12 @@ public class SocketServer {
 					inBuf.flip();
 					Message revMsg = new Message(inBuf);
 					MessageHandler.handleMessage(revMsg, attachment);
-					/*
-					CharBuffer charBuffer = SocketServer.decoder.decode(buffer);
-					System.out.println(charBuffer.toString()); // 接收请求
-
-					// 响应操作，服务器响应结果
-					buffer.clear();
-					String res = "HTTP/1.1 200 OK" + "\r\n\r\n" + "hellworld";
-					buffer = ByteBuffer.wrap(res.getBytes());
-					attachment.write(buffer, attachment, new WriteHandler(
-							buffer));// Response：响应。
-					*/
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}  finally {
+				inBuf.clear();
+				attachment.read(inBuf, attachment, this);
 			}
 		}
 

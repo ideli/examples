@@ -113,11 +113,8 @@ class WriteHandler implements
 	@Override
 	public void completed(Integer result,
 			AsynchronousSocketChannel attachment) {
-		buffer.clear();
-		try {
-			attachment.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(buffer.hasRemaining()) {
+			attachment.write(buffer, attachment, this);
 		}
 	}
 
