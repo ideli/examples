@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.StandardSocketOptions;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+
+import _socket.Message;
+
 
 public class SocketServer {
 
@@ -61,15 +63,13 @@ public class SocketServer {
 		public void completed(final AsynchronousSocketChannel client,
 				SocketServer attachment) {
 			try {
-				System.out.println("远程地址：" + client.getRemoteAddress());
 				// tcp各项参数
 				client.setOption(StandardSocketOptions.TCP_NODELAY, true);
 				client.setOption(StandardSocketOptions.SO_SNDBUF, 1024);
 				client.setOption(StandardSocketOptions.SO_RCVBUF, 1024);
 
 				if (client.isOpen()) {
-					System.out.println("client.isOpen："
-							+ client.getRemoteAddress());
+					System.out.println(client.getRemoteAddress() + " connected");
 					final ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
 					buffer.clear();
 					client.read(buffer, client, new ReadHandler(buffer));
@@ -98,10 +98,10 @@ public class SocketServer {
 	private class ReadHandler implements
 			CompletionHandler<Integer, AsynchronousSocketChannel> {
 
-		private ByteBuffer buffer;
+		private ByteBuffer inBuf;
 
 		public ReadHandler(ByteBuffer buffer) {
-			this.buffer = buffer;
+			this.inBuf = buffer;
 		}
 
 		@Override
@@ -114,8 +114,10 @@ public class SocketServer {
 					System.out.println("空数据"); // 处理空数据
 				} else {
 					// 读取请求，处理客户端发送的数据
-					buffer.flip();
-					
+					inBuf.flip();
+					Message revMsg = new Message(inBuf);
+					MessageHandler.handleMessage(revMsg, attachment);
+					/*
 					CharBuffer charBuffer = SocketServer.decoder.decode(buffer);
 					System.out.println(charBuffer.toString()); // 接收请求
 
@@ -125,36 +127,11 @@ public class SocketServer {
 					buffer = ByteBuffer.wrap(res.getBytes());
 					attachment.write(buffer, attachment, new WriteHandler(
 							buffer));// Response：响应。
-					
+					*/
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-
-		@Override
-		public void failed(Throwable exc, AsynchronousSocketChannel attachment) {
-			exc.printStackTrace();
-			SocketServer.close(attachment);
-		}
-	}
-
-	/**
-	 * Write响应完请求的回调
-	 */
-	private class WriteHandler implements
-			CompletionHandler<Integer, AsynchronousSocketChannel> {
-		private ByteBuffer buffer;
-
-		public WriteHandler(ByteBuffer buffer) {
-			this.buffer = buffer;
-		}
-
-		@Override
-		public void completed(Integer result,
-				AsynchronousSocketChannel attachment) {
-			buffer.clear();
-			SocketServer.close(attachment);
 		}
 
 		@Override
