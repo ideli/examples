@@ -1,4 +1,4 @@
-package _socket.aio;
+package _socket.chap02.aio;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
