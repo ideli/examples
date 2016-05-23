@@ -7,8 +7,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
 
 import _socket.Message;
 
@@ -17,17 +15,13 @@ public class SocketServer {
 
 	static int PORT = 18080;
 	static int BUFFER_SIZE = 1024;
-	static String CHARSET = "utf-8"; // 默认编码
-	static CharsetDecoder decoder = Charset.forName(CHARSET).newDecoder(); // 解码
-
+	static String CHARSET = "utf-8";
 	int port;
-	// ByteBuffer buffer;
+
 	AsynchronousServerSocketChannel serverChannel;
 
 	public SocketServer(int port) throws IOException {
 		this.port = port;
-		// this.buffer = ByteBuffer.allocate(BUFFER_SIZE);
-		this.decoder = Charset.forName(CHARSET).newDecoder();
 	}
 
 	private void listen() throws Exception {
