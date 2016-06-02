@@ -4,14 +4,56 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 public class Client {
 
 	public static void main(String[] args) {
+		new Client().catchException();
 		new Client().toJSONObject();
 		new Client().toObject();
 		new Client().mapToJson();
+	}
+	
+	public void catchException() {
+		//源字符串为null或空白, 返回null
+		JSONObject jo = JSON.parseObject(null);
+		System.out.println("parse(null)=" + jo);
+		String json = "";
+		jo = JSON.parseObject(json);
+		System.out.println("parse(\"\")=" + jo);
+		
+		//源字符串不符合json规范, 抛异常
+		json = "a";
+		try {
+			jo = JSON.parseObject(json);
+			System.out.println("parse(\"a\")=" + jo);
+		} catch (JSONException e) {
+			System.out.println("parse(\"a\")=exception");
+		}
+		json = "{";
+		try {
+			jo = JSON.parseObject(json);
+			System.out.println("parse(\"{\")=" + jo);
+		} catch (JSONException e) {
+			System.out.println("parse(\"{\")=exception");
+		}
+		json = "{a}";
+		try {
+			jo = JSON.parseObject(json);
+			System.out.println("parse(\"{a}\")=" + jo);
+		} catch (JSONException e) {
+			System.out.println("parse(\"{a}\")=exception");
+		}
+		
+		json = "{}";
+		try {
+			jo = JSON.parseObject(json);
+			System.out.println("parse(\"{}\")=" + jo);
+		} catch (JSONException e) {
+			System.out.println("parse(\"{}\")=exception");
+		}
 	}
 
 	public void toJSONObject() {
