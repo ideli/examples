@@ -16,7 +16,7 @@ public class JedisProvider {
 			config.setMaxWaitMillis(1000);
 			config.setTestOnBorrow(true);
 			config.setTestOnReturn(true);
-			pool = new JedisPool(config, "127.0.0.1", 6379);
+			pool = new JedisPool(config, "127.0.0.1", 6380);
 		}
 		return pool.getResource();
 	}

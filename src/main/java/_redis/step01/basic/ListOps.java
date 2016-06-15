@@ -18,75 +18,79 @@ public class ListOps {
 		jedis.flushDB();
 		
 		//lpush 在左边添加
-		long lpush = jedis.lpush("stringlists", "vector");
-		print("lpush stringlists vector=" + lpush);
-		lpush = jedis.lpush("stringlists", "ArrayList");
-		print("lpush stringlists ArrayList=" + lpush);
-		jedis.lpush("stringlists", "vector");
-		jedis.lpush("stringlists", "vector");
-		jedis.lpush("stringlists", "LinkedList");
-		jedis.lpush("stringlists", "MapList");
-		jedis.lpush("stringlists", "SerialList");
-		jedis.lpush("stringlists", "HashList");
+		String fruitKey = "fruit";
+		long lpush = jedis.lpush(fruitKey, "apple");
+		print("lpush " + fruitKey + " apple=" + lpush);
+		lpush = jedis.lpush(fruitKey, "banana");
+		print("lpush " + fruitKey + " banana=" + lpush);
+		jedis.lpush(fruitKey, "apple");
+		jedis.lpush(fruitKey, "apple");
+		jedis.lpush(fruitKey, "orange");
+		jedis.lpush(fruitKey, "grape");
+		jedis.lpush(fruitKey, "peach");
+		jedis.lpush(fruitKey, "lemon");
 		
 		//rpush 在右边添加
-		jedis.rpush("numberlists", "5");
-		jedis.rpush("numberlists", "4");
-		jedis.rpush("numberlists", "2");
-		jedis.rpush("numberlists", "1");
+		String numberKey = "numbers";
+		jedis.rpush(numberKey, "5");
+		jedis.rpush(numberKey, "4");
+		jedis.rpush(numberKey, "2");
+		jedis.rpush(numberKey, "1");
 		
 		//lrange 获得列表片段
-		print("lrange stringlists [0,-1]=" + jedis.lrange("stringlists", 0, -1));
-		print("lrange numberlists [0,-1]=" + jedis.lrange("numberlists", 0, -1));
-		print("lrange stringlists [1,3]=" + jedis.lrange("stringlists", 1, 3));
+		print("lrange " + fruitKey + " [0,-1]=" + jedis.lrange(fruitKey, 0, -1));
+		print("lrange " + numberKey + " [0,-1]=" + jedis.lrange(numberKey, 0, -1));
+		print("lrange " + fruitKey + " [1,3]=" + jedis.lrange(fruitKey, 1, 3));
         
-        //删除列表指定的值,第二个参数为删除的个数(有重复时),后add进去的值先被删,类似于出栈,返回删除个数
-        Long del = jedis.lrem("stringlists", 2, "vector");
-        print("lrem Vector*2=" + del);
-        print("after lrem lrange stringlists [0,-1]=" + jedis.lrange("stringlists", 0, -1));
+        //删除列表指定的值,第二个参数为删除的个数(有重复时),后添加进去的值先被删,类似于出栈,返回删除个数
+        Long del = jedis.lrem(fruitKey, 2, "apple");
+        print("lrem " + fruitKey + " apple*2=" + del);
+        print("after lrem, lrange " + fruitKey + " [0,-1]=" + jedis.lrange(fruitKey, 0, -1));
         
         //删除区间以外的数据, 成功返回 OK
-        String ltrim = jedis.ltrim("stringlists", 0, 3);
-        print("ltrim [0,3]=" + ltrim);
-        print("after ltrim lrange stringlists [0,-1]=" + jedis.lrange("stringlists", 0, -1));
+        String ltrim = jedis.ltrim(fruitKey, 0, 3);
+        print("ltrim " + fruitKey + " [0,3]=" + ltrim);
+        print("after ltrim, lrange " + fruitKey + " [0,-1]=" + jedis.lrange(fruitKey, 0, -1));
         
         //列表元素出栈
-        String lpop = jedis.lpop("stringlists");
-        print("lpop=" + lpop);
-        print("after lpop lrange stringlists [0,-1]=" + jedis.lrange("stringlists", 0, -1));
+        String lpop = jedis.lpop(fruitKey);
+        print("lpop " + fruitKey + " =" + lpop);
+        print("after lpop, lrange " + fruitKey + " [0,-1]=" + jedis.lrange(fruitKey, 0, -1));
         
         //修改列表中指定下标的值 
-        String lset = jedis.lset("stringlists", 0, "hello list!");
-        print("lset 0=" + lset);
-        print("after lset lrange stringlists [0,-1]=" + jedis.lrange("stringlists", 0, -1));
+        String lset = jedis.lset(fruitKey, 0, "mango");
+        print("lset " + fruitKey + " 0=" + lset);
+        print("after lset, lrange " + fruitKey + " [0,-1]=" + jedis.lrange(fruitKey, 0, -1));
         
         //数组长度
-        print("llen=" + jedis.llen("stringlists"));
+        print("llen " + fruitKey + " =" + jedis.llen(fruitKey));
         
         //排序
         SortingParams sortingParameters = new SortingParams();
         sortingParameters.alpha();
         sortingParameters.limit(0, 3);
-        List<String> list = jedis.sort("stringlists", sortingParameters);
+        List<String> list = jedis.sort(fruitKey, sortingParameters);
         String sort = "";
 		for(int i = 0; i < list.size(); i++) {
 			sort += list.get(i) + " ";
 		}
-		print("sort=" + sort);
+		print("sort " + fruitKey + " =" + sort);
 		
 		//获取列表指定下标的值, 不存在返回null
 		int pos = 2;
-		String lindex = jedis.lindex("stringlists", pos);
-		print("lindex 2=" + lindex);
+		String lindex = jedis.lindex(fruitKey, pos);
+		print("lindex " + fruitKey + " 2=" + lindex);
 		
-		jedis.linsert("numberlists", LIST_POSITION.BEFORE, "2", "3");
-		print("after linsert lrange numberlists [0,-1]=" + jedis.lrange("numberlists", 0, -1));
+		//在指定元素前/后插入
+		jedis.linsert(numberKey, LIST_POSITION.BEFORE, "2", "3");
+		print("after linsert, lrange " + numberKey + " [0,-1]=" + jedis.lrange(numberKey, 0, -1));
 		
-		String value = jedis.rpoplpush("numberlists", "dst");
+		String value = jedis.rpoplpush(numberKey, "dst");
 		while(value != null) {
-			System.out.println("rpoplpush=" + value);
-			value = jedis.rpoplpush("numberlists", "dst");
+			System.out.println("rpoplpush " + numberKey + " =" + value);
+			value = jedis.rpoplpush(numberKey, "dst");
 		}
+		print("after rpoplpush, lrange dst [0,-1]=" + jedis.lrange("dst", 0, -1));
 		
 		jedis.close();
 	}
