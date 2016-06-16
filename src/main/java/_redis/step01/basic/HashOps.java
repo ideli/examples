@@ -1,6 +1,7 @@
 package _redis.step01.basic;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +43,14 @@ public class HashOps {
 		print("hsetnx id 3=" + hsetnx + "; value=" + jedis.hget(key, "id"));
 		hsetnx = jedis.hsetnx(key, "title", "商品001");
 		print("hsetnx title 商品001=" + hsetnx + "; value=" + jedis.hget(key, "title"));
+		
+		//hmset 设置多个field
+		Map<String, String> msets = new HashMap<>();
+		msets.put("color", "red");
+		msets.put("width", "100");
+		msets.put("height", "80");
+		String hmset = jedis.hmset(key, msets);
+		print("hmset color,width,height=" + hmset);
 
 		// hincr 新增整数类型的键值对或增加值
 		long hincr = jedis.hincrBy(key, "price", 4l);
@@ -72,10 +81,8 @@ public class HashOps {
 		print("hdel id=" + hdel);
 		
 		// 删除多个field
-		jedis.hset(key, "field1", "1");
-		jedis.hset(key, "field2", "1");
-		hdel = jedis.hdel(key, "field1", "field2");
-		print("hdel field1,field2=" + hdel);
+		hdel = jedis.hdel(key, "color", "width", "height");
+		print("hdel color,width,height=" + hdel);
 		
 		// hincrBy 在整数类型值上增加, 返回修改后的值
 		Long hincrBy = jedis.hincrBy(key, "price", 100l);
