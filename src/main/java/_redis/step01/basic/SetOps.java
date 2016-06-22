@@ -1,6 +1,5 @@
 package _redis.step01.basic;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import redis.clients.jedis.Jedis;
@@ -18,61 +17,54 @@ public class SetOps {
 		jedis.flushDB();
 
 		// 向sets集合中加入元素, 成功返回1, 失败返回0
-		Long sadd = jedis.sadd("sets", "element001");
-		print("sadd element001=" + sadd);
+		Long sadd = jedis.sadd("fruit", "apple");
+		print("sadd fruit apple=" + sadd);
 		
-		sadd = jedis.sadd("sets", "element001");
-		print("sadd element001 again=" + sadd);
+		//不能添加重复元素
+		sadd = jedis.sadd("fruit", "apple");
+		print("sadd fruit apple again=" + sadd);
+		jedis.sadd("fruit", "banana", "orange", "grape");
 		
-		jedis.sadd("sets", "element002");
-		jedis.sadd("sets", "element003", "element004");
-		
-		Set<String> set = jedis.smembers("sets");
-		String setall = "";
-		Iterator<String> i = set.iterator();
-		while (i.hasNext()) {
-			setall += i.next() + " ";
-		}
-		print("smembers=" + setall);
+		// 返回所有元素
+		print("smembers fruit=" + jedis.smembers("fruit"));
 
 		// 删除元素
-		long srem = jedis.srem("sets", "element001");
-		print("srem element001=" + srem);
+		long srem = jedis.srem("fruit", "apple");
+		print("srem fruit apple=" + srem);
 		
 		// 判断是否存在元素
-		boolean exists = jedis.sismember("sets", "element001");
-		print("sismember element001=" + exists);
-		exists = jedis.sismember("sets", "element002");
-		print("sismember element002=" + exists);
+		boolean exists = jedis.sismember("fruit", "apple");
+		print("sismember fruit apple=" + exists);
+		exists = jedis.sismember("fruit", "banana");
+		print("sismember fruit banana=" + exists);
 		
-		//统计元素个数
-		print("scard=" + jedis.scard("sets"));
+		// 统计元素个数
+		print("scard fruit=" + jedis.scard("fruit"));
 		
-		//随机获取一个元素
-		print("srandmember=" + jedis.srandmember("sets"));
+		// 随机获取一个元素
+		print("srandmember fruit=" + jedis.srandmember("fruit"));
 		
-		//从左边弹出一个元素
-		print("spop=" + jedis.spop("sets"));
+		// 随机弹出一个元素
+		print("spop fruit=" + jedis.spop("fruit"));
 
-		jedis.sadd("sets1", "element003");
-		jedis.sadd("sets1", "element004");
-		jedis.sadd("sets1", "element005");
-		jedis.sadd("sets1", "element006");
+		jedis.sadd("fruit", "apple", "banana", "orange", "grape");
+		jedis.sadd("food", "orange", "grape", "peach", "lemon");
 		
-		// 交集
-		set = jedis.sinter("sets", "sets1");
-		print("sinter sets sets1=" + set);
+		// 求交集
+		Set<String> set = jedis.sinter("fruit", "food");
+		print("sinter fruit food=" + set);
 		
-		long sinterstore = jedis.sinterstore("sinter", "sets", "sets1");
-		print("sinterstore=" + sinterstore + "; smembers sinter=" + jedis.smembers("sinter"));
+		// 求交集并存储到指定集合
+		jedis.sinterstore("sinter", "fruit", "food");
+		print("sinterstore sinter=" + jedis.smembers("sinter"));
 		
-		// 并集
-		set = jedis.sunion("sets", "sets1");
-		print("sunion sets sets1=" + set);
+		// 求并集
+		set = jedis.sunion("fruit", "food");
+		print("sunion fruit food=" + set);
 		
-		// 差集(set中有, set1中没有的元素)
-		set = jedis.sdiff("sets", "sets1");
-		print("sdiff sets sets1=" + set);
+		// 求差集(fruit中有, food中没有的元素)
+		set = jedis.sdiff("fruit", "food");
+		print("sdiff fruit food=" + set);
 
 		jedis.close();
 	}

@@ -1,5 +1,7 @@
 package _redis.step02.example;
 
+import java.util.Set;
+
 import com.alibaba.fastjson.JSON;
 
 public class Goods {
@@ -16,6 +18,7 @@ public class Goods {
 	private long id;
 	private String title;
 	private float price;
+	private Set<String> tags;
 	public long getId() {
 		return id;
 	}
@@ -34,7 +37,13 @@ public class Goods {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-	
+	public Set<String> getTags() {
+		return tags;
+	}
+	public void setTags(Set<String> tags) {
+		this.tags = tags;
+	}
+
 	public String toString() {
 		return JSON.toJSONString(this);
 	}
