@@ -16,7 +16,6 @@ import org.quartz.JobExecutionException;
  * @author Bill Kratzer
  */
 public class HelloJob implements Job {
-
 	static Logger _log = LogManager.getLogger(LogManager.ROOT_LOGGER_NAME);
 
 	/**

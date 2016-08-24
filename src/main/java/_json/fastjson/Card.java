@@ -3,7 +3,7 @@ package _json.fastjson;
 public class Card {
 
 	private int id;
-	private String phone;
+	private String phone; 
 	private String name;
 	
 	public int getId() {

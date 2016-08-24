@@ -12,11 +12,16 @@ public class RedisDao {
 		ApplicationContext context = new ClassPathXmlApplicationContext("_spring/step10/redis/spring-redis.xml");
 		@SuppressWarnings("unchecked")
 		RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>)context.getBean("redisTemplate");
+		/*
+		ApplicationContext context = new ClassPathXmlApplicationContext("_spring/step10/redis/spring-redis.xml");
+		@SuppressWarnings("unchecked")
+		RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>)context.getBean("redisTemplate");
 		RedisDao dao = new RedisDao(redisTemplate);
 		dao.addOrUpdate("key", "a value");
 		System.out.println(dao.load("key"));
 		dao.delete("key");
 		System.out.println(dao.load("key"));
+		*/
 	}
 
 	protected RedisTemplate<String, String> redisTemplate;
