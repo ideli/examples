@@ -31,7 +31,7 @@ public class BubbleSort {
 		//每一轮后完成一个数字归位, 下一轮要比较的数字个数减1(所以内层循环是j < n - i)
 		int n = numbers.length - 1;
 		int t;
-		for(int i = 0; i < n; i++) {
+		for(int i = 0; i < n - 1; i++) {
 			for(int j = 0; j < n - i; j++) {
 				if(descend) { //从大到小
 					if(numbers[j] < numbers[j + 1]) {
