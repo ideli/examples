@@ -1,5 +1,6 @@
 package _algorithms.chap01.sort;
 
+import java.util.LinkedList;
 import java.util.Random;
 
 /**
@@ -70,5 +71,39 @@ public class QuickSort {
 
         sort(descend, left, i - 1, numbers);
         sort(descend, i + 1, right, numbers);
+    }
+
+    public void sortWithoutRecursion(int left, int right, int... numbers) {
+        LinkedList<Integer> stack = new LinkedList<>();
+        int index;
+        stack.push(left);
+        stack.push(right);
+        while (!stack.isEmpty()) {
+            right = stack.pop();
+            left = stack.pop();
+            index = partition(left, right, numbers);
+            if (left < index - 1) {
+                stack.push(left);
+                stack.push(index - 1);
+            }
+            if (right > index + 1) {
+                stack.push(index + 1);
+                stack.push(right);
+            }
+        }
+    }
+
+    public int partition(int left, int right, int... numbers) {
+        int temp = numbers[left];
+        while (left < right) {
+            while (numbers[right] >= temp && left < right)
+                right--;
+            numbers[left] = numbers[right];
+            while (numbers[left] <= temp && left < right)
+                left++;
+            numbers[right] = numbers[left];
+        }
+        numbers[left] = temp;
+        return left;
     }
 }
