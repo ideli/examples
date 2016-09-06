@@ -32,16 +32,12 @@ public class BfsRatMaze {
         int nextX = 0, nextY = 0;
         List<Trace> traces = new ArrayList<>();
         traces.add(head, new Trace(startX, startY, -1, 0));
-        //Trace[] que = new Trace[2501];
-        //que[tail] = new Trace(startX, startY, 0, 0);
-        //tail++;
         mark[startX][startY] = 1;
         int flag = 0;
         while(head < tail) {
             for(int k = 0; k <=3; k++) {
                 nextX = traces.get(head).getX() + next[k][0];
                 nextY = traces.get(head).getY() + next[k][1];
-                //System.out.println("cur: " + nextX + "," + nextY);
                 if(nextX < 0 || nextX >= width || nextY < 0 || nextY >= height) {  //超出边界
                     continue;
                 }
@@ -58,7 +54,6 @@ public class BfsRatMaze {
             if(flag == 1)
                 break;
             head++;
-            //System.out.println("head,tail=" + head + "," + tail);
         }
         Trace end = traces.get(tail - 1);
         int father = end.getFather();
