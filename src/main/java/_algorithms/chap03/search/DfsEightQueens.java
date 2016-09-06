@@ -1,33 +1,33 @@
 package _algorithms.chap03.search;
 
 /**
- * Created by Administrator on 2016/9/6.
+ * 八皇后问题
+ * Created by autfish on 2016/9/6.
  */
-public class DfsEightQuees {
+public class DfsEightQueens {
 
-    int[] Queens = new int[8];
-    int count = 0;
+    int[] queens = new int[8]; //记录每一列皇后的摆放位置
+    int count = 0; //摆法总数
 
     public void dfs(int column) {
-        if(column == 8) { //8个皇后已放置完成
+        if(column == 8) { //8个皇后都已经摆放
             count++;
             System.out.println("第" + count + "种方法:");
             print();
-
             return;
         }
         for(int i = 0; i < 8; i++) {
-            Queens[column] = i; //在该列的第i行上放置皇后
-            if(isValid(column))
-                dfs(column + 1);
+            queens[column] = i; //在该列的第i行上放置皇后
+            if(isValid(column)) //检查摆放在该位置是否与前column-1列的皇后有冲突
+                dfs(column + 1); //没有冲突则开始下一列8个位置的尝试
         }
     }
 
     private boolean isValid(int column) {
         for(int i = 0; i < column; i++) { //第column列上的皇后与前面column-1个皇后比较
-            if(Queens[i] == Queens[column]) //两个皇后在同一行上
+            if(queens[i] == queens[column]) //两个皇后在同一行上
                 return false;
-            if(Math.abs(Queens[i] - Queens[column]) == (column - i)) //两个皇后在同一对角线上
+            if(Math.abs(queens[i] - queens[column]) == (column - i)) //两个皇后在同一对角线上
                 return false;
         }
         return true;
@@ -36,7 +36,7 @@ public class DfsEightQuees {
     private void print() {
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
-                if(Queens[i] == j)
+                if(queens[i] == j)
                     System.out.print("* ");
                 else
                     System.out.print("_ ");
@@ -46,7 +46,7 @@ public class DfsEightQuees {
     }
 
     public static void main(String[] args) {
-        DfsEightQuees q = new DfsEightQuees();
+        DfsEightQueens q = new DfsEightQueens();
         q.dfs(0);
         System.out.println("共" + q.count + "摆放方法");
     }
