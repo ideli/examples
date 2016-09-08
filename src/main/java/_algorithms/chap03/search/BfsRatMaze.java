@@ -20,6 +20,58 @@ public class BfsRatMaze {
     int[][] maze;
     int[][] mark;
 
+    static class Trace {
+
+        public Trace(int x, int y, int father, int step) {
+            this.x = x;
+            this.y = y;
+            this.father = father;
+            this.step = step;
+        }
+
+        private int x;
+        private int y;
+        private int father;
+        private int step;
+
+        public int getX() {
+            return x;
+        }
+
+        public void setX(int x) {
+            this.x = x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public void setY(int y) {
+            this.y = y;
+        }
+
+        public int getFather() {
+            return father;
+        }
+
+        public void setFather(int father) {
+            this.father = father;
+        }
+
+        public int getStep() {
+            return step;
+        }
+
+        public void setStep(int step) {
+            this.step = step;
+        }
+
+        @Override
+        public String toString() {
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
+        }
+    }
+
     public void bfs() {
         int[][] next = new int[][] { //按右->下->左->上的顺序尝试
                 {1, 0},
@@ -29,7 +81,7 @@ public class BfsRatMaze {
         };
         int head = 0, tail = 1;
         int startX = 0, startY = 0;
-        int nextX = 0, nextY = 0;
+        int nextX, nextY;
         List<Trace> traces = new ArrayList<>();
         traces.add(head, new Trace(startX, startY, -1, 0));
         mark[startX][startY] = 1;
@@ -102,57 +154,5 @@ public class BfsRatMaze {
         BfsRatMaze b = new BfsRatMaze();
         b.initMaze();
         b.bfs();
-    }
-}
-
-class Trace {
-
-    public Trace(int x, int y, int father, int step) {
-        this.x = x;
-        this.y = y;
-        this.father = father;
-        this.step = step;
-    }
-
-    private int x;
-    private int y;
-    private int father;
-    private int step;
-
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getFather() {
-        return father;
-    }
-
-    public void setFather(int father) {
-        this.father = father;
-    }
-
-    public int getStep() {
-        return step;
-    }
-
-    public void setStep(int step) {
-        this.step = step;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
 }
