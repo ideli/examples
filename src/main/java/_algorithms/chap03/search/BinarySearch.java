@@ -15,6 +15,10 @@ public class BinarySearch {
     }
 
     public void search(int key) {
+        if(key < this.datas[0] || key > this.datas[this.datas.length - 1]) {
+            System.out.println("未找到关键字" + key + ", 查找0次");
+            return;
+        }
         int from = 0;
         int to = this.datas.length - 1;
         int mid;
@@ -36,6 +40,7 @@ public class BinarySearch {
 
     public static void main(String[] args) {
         BinarySearch bs = new BinarySearch();
+        bs.search(1);
         bs.search(5);
         bs.search(33);
         bs.search(50);
