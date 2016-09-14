@@ -2,6 +2,8 @@ package _algorithms.chap04.tree;
 
 /**
  * 二叉排序树
+ * 左子节点的数据小于父节点, 右子节点的数据大于父节点
+ * 中序遍历结果是有序数据
  * Created by autfish on 2016/9/14.
  */
 public class BinSortTree {
@@ -51,6 +53,40 @@ public class BinSortTree {
             return searchNode(from.rightChild, key);
         } else {
             return searchNode(from.leftChild, key);
+        }
+    }
+
+    public void delete(Node from, Node child) {
+        if(from == null) {
+            return;
+        }
+        if(from.data == child.data) {
+            deleteNode(from);
+        } else if(child.data < from.data) {
+            delete(from.leftChild, child);
+        } else {
+            delete(from.rightChild, child);
+        }
+    }
+
+    private void deleteNode(Node node) {
+        if(node.rightChild == null) {
+            node = node.leftChild;
+        } else if(node.leftChild == null) {
+            node = node.rightChild;
+        } else {
+            Node parent = node;
+            Node leaf = node.rightChild;
+            while(leaf.leftChild != null) {
+                parent = leaf;
+                leaf = leaf.leftChild;
+            }
+            node.data = leaf.data;
+            if(parent == node) {
+                parent.rightChild = null;
+            } else {
+                parent.leftChild = null;
+            }
         }
     }
 
