@@ -6,7 +6,6 @@ import java.util.Random;
  * 堆: 特殊的完全二叉树, 分为最大堆和最小堆
  * 最大堆: 所有父节点都比子节点要大
  * 最小堆: 所有父节点都比子节点要小
- * 本例以最小堆为例
  * Created by autfish on 2016/9/13.
  */
 public class HeapByArray {

@@ -10,15 +10,17 @@ public class BinSortTree {
 
     private Node root;
 
-    public void add(Node child) {
-        if(child == null) {
-            return;
-        }
+    public void add(int key) {
+        Node child = new Node(key);
         if(root == null) {
             root = child;
             return;
         }
         addNode(root, child);
+    }
+
+    public Node search(int key) {
+        return searchNode(root, key);
     }
 
     private void addNode(Node parent, Node child) {
@@ -37,15 +39,6 @@ public class BinSortTree {
         }
     }
 
-    public void search(int key) {
-        Node target = searchNode(root, key);
-        if(target == null) {
-            System.out.println("未找到关键字" + key);
-        } else {
-            System.out.println("查找到关键字" + key);
-        }
-    }
-
     private Node searchNode(Node from, int key) {
         if(from == null || key == from.data) {
             return from;
@@ -56,37 +49,57 @@ public class BinSortTree {
         }
     }
 
-    public void delete(Node from, Node child) {
-        if(from == null) {
-            return;
-        }
-        if(from.data == child.data) {
-            deleteNode(from);
-        } else if(child.data < from.data) {
-            delete(from.leftChild, child);
-        } else {
-            delete(from.rightChild, child);
+    public void delete(int key) {
+        Node child = root;
+        Node parent = child;
+        boolean isLefChild = true;
+        while(child != null) {
+            if(child.data == key) {
+                deleteNode(parent, child, isLefChild);
+                child = null;
+            } else if(key < child.data) {
+                isLefChild = true;
+                parent = child;
+                child = child.leftChild;
+            } else {
+                isLefChild = false;
+                parent = child;
+                child = child.rightChild;
+            }
         }
     }
 
-    private void deleteNode(Node node) {
-        if(node.rightChild == null) {
-            node = node.leftChild;
-        } else if(node.leftChild == null) {
-            node = node.rightChild;
+    private void deleteNode(Node parent, Node child, boolean isLefChild) {
+        if(child.leftChild == null && child.rightChild == null) {
+            if(isLefChild) {
+                parent.leftChild = null;
+            } else {
+                parent.rightChild = null;
+            }
+        } else if(child.leftChild == null) {
+            if(isLefChild) {
+                parent.leftChild = child.rightChild;
+            } else {
+                parent.rightChild = child.rightChild;
+            }
+        } else if(child.rightChild == null) {
+            if(isLefChild) {
+                parent.leftChild = child.leftChild;
+            } else {
+                parent.rightChild = child.leftChild;
+            }
         } else {
-            Node parent = node;
-            Node leaf = node.rightChild;
+            Node leaf = child.rightChild;
+            parent = child;
             while(leaf.leftChild != null) {
                 parent = leaf;
                 leaf = leaf.leftChild;
             }
-            node.data = leaf.data;
-            if(parent == node) {
-                parent.rightChild = null;
-            } else {
+            child.data = leaf.data;
+            if(parent != child)
                 parent.leftChild = null;
-            }
+            else
+                parent.rightChild = null;
         }
     }
 
@@ -113,13 +126,15 @@ public class BinSortTree {
         int[] datas = new int[] { 54, 90, 6, 69, 12, 37, 92, 28, 65, 83 };
         BinSortTree bsTree = new BinSortTree();
         for(int i = 0; i < datas.length; i++) {
-            bsTree.add(new Node(datas[i]));
+            bsTree.add(datas[i]);
         }
         System.out.print("中序遍历");
         bsTree.inOrder(bsTree.root);
         System.out.println();
 
-        bsTree.search(37);
-        bsTree.search(38);
+        bsTree.delete(83);
+        System.out.print("中序遍历");
+        bsTree.inOrder(bsTree.root);
+        System.out.println();
     }
 }
