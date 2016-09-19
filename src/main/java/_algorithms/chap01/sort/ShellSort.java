@@ -1,24 +1,31 @@
 package _algorithms.chap01.sort;
 
 /**
- * 插入排序法
+ * 希尔排序法
  * Created by autfish on 2016/9/18.
  */
-public class InsertSort {
+public class ShellSort {
     private int[] numbers;
 
-    public InsertSort(int[] numbers) {
+    public ShellSort(int[] numbers) {
         this.numbers = numbers;
     }
 
     public void sort() {
+        int section = this.numbers.length / 2;
+        int j;
         int temp;
-        for(int i = 1; i < this.numbers.length; i++) {
-            temp = this.numbers[i]; //取出一个未排序的数
-            for(int j = i - 1; j >= 0 && temp < this.numbers[j]; j--) {
-                this.numbers[j + 1] = this.numbers[j];
-                this.numbers[j] = temp;
+        while(section >= 1) {
+            for(int i = section; i < this.numbers.length; i++) {
+                temp = this.numbers[i];
+                j = i - section;
+                while(j >= 0 && this.numbers[j] > temp) {
+                    this.numbers[j + section] = this.numbers[j];
+                    j = j - section;
+                }
+                this.numbers[j + section] = temp;
             }
+            section /= 2;
         }
         System.out.print("排序后: ");
         for(int x = 0; x < numbers.length; x++) {
@@ -33,7 +40,7 @@ public class InsertSort {
             System.out.print(numbers[x] + "  ");
         }
         System.out.println();
-        InsertSort is = new InsertSort(numbers);
-        is.sort();
+        ShellSort ss = new ShellSort(numbers);
+        ss.sort();
     }
 }
