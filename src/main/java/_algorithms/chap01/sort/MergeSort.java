@@ -9,7 +9,7 @@ import java.util.Arrays;
 public class MergeSort {
 
     public static void main(String[] args) {
-        int[] numbers = new int[]{4, 3, 6, 2, 7, 1, 5};
+        int[] numbers = new int[] {4, 3, 6, 2, 7, 1, 5};
         System.out.println("排序前: " + Arrays.toString(numbers));
 
         MergeSort ms = new MergeSort();
@@ -18,41 +18,44 @@ public class MergeSort {
         System.out.println("排序后: " + Arrays.toString(numbers));
     }
 
-    public void sort(int[] numbers, int left, int right) {
-        int middle = (left + right) / 2;
-        if (left < right) {
-            sort(numbers, left, middle);
-            sort(numbers, middle + 1, right);
-            merge(numbers, left, middle, right);
+    public void sort(int[] numbers, int from, int to) {
+        int middle = (from + to) / 2;
+        if (from < to) {
+            sort(numbers, from, middle);
+            sort(numbers, middle + 1, to);
+            //左侧数列最大值小于右侧数列最小值, 不需要通过合并来调整顺序
+            if(numbers[middle] < numbers[middle + 1])
+                return;
+            merge(numbers, from, middle, to);
         }
     }
 
-    private void merge(int[] numbers, int left, int middle, int right) {
-        int[] temp = new int[right - left + 1];
-        int lpointer = left;
-        int rpointer = middle + 1;
+    private void merge(int[] numbers, int from, int middle, int to) {
+        int[] temp = new int[to - from + 1];
+        int left = from;
+        int right = middle + 1;
         int i = 0;
 
         //从拆分到两边数列各剩一个数字开始合并; 当数列中有多个数字时, 一定是已经排好序的
         //从两边数列左侧开始依次取数对比, 挑选小的一个放入临时数组
-        while (lpointer <= middle && rpointer <= right) {
-            if (numbers[lpointer] < numbers[rpointer]) {
-                temp[i++] = numbers[lpointer++];
+        while (left <= middle && right <= to) {
+            if (numbers[left] < numbers[right]) {
+                temp[i++] = numbers[left++];
             } else {
-                temp[i++] = numbers[rpointer++];
+                temp[i++] = numbers[right++];
             }
         }
 
         //把左边数列剩余的数移入数组
-        while (lpointer <= middle) {
-            temp[i++] = numbers[lpointer++];
+        while (left <= middle) {
+            temp[i++] = numbers[left++];
         }
 
         //把右边数列剩余的数移入数组
-        while (rpointer <= right) {
-            temp[i++] = numbers[rpointer++];
+        while (right <= to) {
+            temp[i++] = numbers[right++];
         }
 
-        System.arraycopy(temp, 0, numbers, left, temp.length);
+        System.arraycopy(temp, 0, numbers, from, temp.length);
     }
 }
