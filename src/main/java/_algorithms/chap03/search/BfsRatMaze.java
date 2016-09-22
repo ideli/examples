@@ -13,8 +13,8 @@ import java.util.List;
 public class BfsRatMaze {
 
     int min = Integer.MAX_VALUE;
-    int endX = 3;  //目标点横坐标
-    int endY = 3;  //目标点纵坐标
+    int endX = 4;  //目标点横坐标
+    int endY = 2;  //目标点纵坐标
     int width = 5;  //迷宫宽度
     int height = 4;  //迷宫高度
     int[][] maze;
@@ -87,12 +87,13 @@ public class BfsRatMaze {
         mark[startX][startY] = 1;
         int flag = 0;
         while(head < tail) {
-            for(int k = 0; k <=3; k++) {
+            for(int k = 0; k <= 3; k++) {
                 nextX = traces.get(head).getX() + next[k][0];
                 nextY = traces.get(head).getY() + next[k][1];
                 if(nextX < 0 || nextX >= width || nextY < 0 || nextY >= height) {  //超出边界
                     continue;
                 }
+                //没有障碍且没有探索过, 则把当前位置标记为未探索点
                 if(maze[nextX][nextY] == 0 && mark[nextX][nextY] == 0) {
                     this.mark[nextX][nextY] = 1;
                     traces.add(tail, new Trace(nextX, nextY, head, traces.get(head).getStep() + 1));
@@ -105,6 +106,7 @@ public class BfsRatMaze {
             }
             if(flag == 1)
                 break;
+            //一个点的四个方向探索完成, 取编号最小的一个未探索点
             head++;
         }
         Trace end = traces.get(tail - 1);
@@ -131,7 +133,7 @@ public class BfsRatMaze {
         this.maze[2][0] = 1;
         this.maze[1][2] = 1;
         this.maze[2][2] = 1;
-        this.maze[3][2] = 1;
+        this.maze[4][1] = 1;
         this.mark[0][0] = 1;
 
         //打印迷宫 _表示可通行 *表示障碍 !表示目标
