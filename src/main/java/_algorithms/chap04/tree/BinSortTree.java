@@ -11,12 +11,12 @@ public class BinSortTree {
     private Node root;
 
     public void add(int key) {
-        Node child = new Node(key);
         if(root == null) {
-            root = child;
+            root = new Node(key);
             return;
         }
-        addNode(root, child);
+        if(searchNode(root, key) == null)
+            addNode(root, new Node(key));
     }
 
     public Node search(int key) {
