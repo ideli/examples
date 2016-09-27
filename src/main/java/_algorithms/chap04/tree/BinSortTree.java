@@ -9,6 +9,7 @@ package _algorithms.chap04.tree;
 public class BinSortTree {
 
     private Node root;
+    private int steps;
 
     public void add(int key) {
         if(root == null) {
@@ -19,8 +20,14 @@ public class BinSortTree {
             addNode(root, new Node(key));
     }
 
-    public Node search(int key) {
-        return searchNode(root, key);
+    public void search(int key) {
+        this.steps = 0;
+        Node node = searchNode(root, key);
+        if(node == null) {
+            System.out.println("共查找" + this.steps + "次, 未找到" + key);
+        } else {
+            System.out.println("共查找" + this.steps + "次, 搜索到" + key);
+        }
     }
 
     private void addNode(Node parent, Node child) {
@@ -40,6 +47,7 @@ public class BinSortTree {
     }
 
     private Node searchNode(Node from, int key) {
+        this.steps++;
         if(from == null || key == from.data) {
             return from;
         } else if(key > from.data) {
@@ -52,38 +60,38 @@ public class BinSortTree {
     public void delete(int key) {
         Node child = root;
         Node parent = child;
-        boolean isLefChild = true;
+        boolean isLeftChild = true;
         while(child != null) {
             if(child.data == key) {
-                deleteNode(parent, child, isLefChild);
+                deleteNode(parent, child, isLeftChild);
                 child = null;
             } else if(key < child.data) {
-                isLefChild = true;
+                isLeftChild = true;
                 parent = child;
                 child = child.leftChild;
             } else {
-                isLefChild = false;
+                isLeftChild = false;
                 parent = child;
                 child = child.rightChild;
             }
         }
     }
 
-    private void deleteNode(Node parent, Node child, boolean isLefChild) {
+    private void deleteNode(Node parent, Node child, boolean isLeftChild) {
         if(child.leftChild == null && child.rightChild == null) {
-            if(isLefChild) {
+            if(isLeftChild) {
                 parent.leftChild = null;
             } else {
                 parent.rightChild = null;
             }
         } else if(child.leftChild == null) {
-            if(isLefChild) {
+            if(isLeftChild) {
                 parent.leftChild = child.rightChild;
             } else {
                 parent.rightChild = child.rightChild;
             }
         } else if(child.rightChild == null) {
-            if(isLefChild) {
+            if(isLeftChild) {
                 parent.leftChild = child.leftChild;
             } else {
                 parent.rightChild = child.leftChild;
@@ -97,9 +105,9 @@ public class BinSortTree {
             }
             child.data = leaf.data;
             if(parent != child)
-                parent.leftChild = null;
+                parent.leftChild = leaf.leftChild;
             else
-                parent.rightChild = null;
+                parent.rightChild = leaf.rightChild;
         }
     }
 
@@ -132,9 +140,15 @@ public class BinSortTree {
         bsTree.inOrder(bsTree.root);
         System.out.println();
 
-        bsTree.delete(83);
+        bsTree.search(90);
+        bsTree.search(65);
+        bsTree.search(28);
+
+        bsTree.delete(90);
         System.out.print("中序遍历");
         bsTree.inOrder(bsTree.root);
         System.out.println();
+
+        bsTree.search(90);
     }
 }
