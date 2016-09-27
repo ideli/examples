@@ -1,12 +1,12 @@
 package _algorithms.chap04.tree;
 
 /**
- * 二叉排序树
+ * 二叉搜索树
  * 左子节点的数据小于父节点, 右子节点的数据大于父节点
  * 中序遍历结果是有序数据
  * Created by autfish on 2016/9/14.
  */
-public class BinSortTree {
+public class BinarySearchTree {
 
     private Node root;
     private int steps;
@@ -132,7 +132,7 @@ public class BinSortTree {
 
     public static void main(String[] args) {
         int[] datas = new int[] { 54, 90, 6, 69, 12, 37, 92, 28, 65, 83 };
-        BinSortTree bsTree = new BinSortTree();
+        BinarySearchTree bsTree = new BinarySearchTree();
         for(int i = 0; i < datas.length; i++) {
             bsTree.add(datas[i]);
         }
