@@ -11,6 +11,10 @@ public class BinarySearchTree {
     private Node root;
     private int steps;
 
+    /**
+     * 插入节点
+     * @param key
+     */
     public void add(int key) {
         if(root == null) {
             root = new Node(key);
@@ -18,16 +22,6 @@ public class BinarySearchTree {
         }
         if(searchNode(root, key) == null)
             addNode(root, new Node(key));
-    }
-
-    public void search(int key) {
-        this.steps = 0;
-        Node node = searchNode(root, key);
-        if(node == null) {
-            System.out.println("共查找" + this.steps + "次, 未找到" + key);
-        } else {
-            System.out.println("共查找" + this.steps + "次, 搜索到" + key);
-        }
     }
 
     private void addNode(Node parent, Node child) {
@@ -46,6 +40,20 @@ public class BinarySearchTree {
         }
     }
 
+    /**
+     * 查找节点
+     * @param key
+     */
+    public void search(int key) {
+        this.steps = 0;
+        Node node = searchNode(root, key);
+        if(node == null) {
+            System.out.println("共查找" + this.steps + "次, 未找到" + key);
+        } else {
+            System.out.println("共查找" + this.steps + "次, 搜索到" + key);
+        }
+    }
+
     private Node searchNode(Node from, int key) {
         this.steps++;
         if(from == null || key == from.data) {
@@ -57,6 +65,10 @@ public class BinarySearchTree {
         }
     }
 
+    /**
+     * 删除节点
+     * @param key
+     */
     public void delete(int key) {
         Node child = root;
         Node parent = child;
@@ -111,6 +123,10 @@ public class BinarySearchTree {
         }
     }
 
+    /**
+     * 中序遍历二叉搜索树, 结果是从小到大排列的
+     * @param node
+     */
     public void inOrder(Node node) {
         if(node == null) {
             return;
@@ -131,7 +147,7 @@ public class BinarySearchTree {
     }
 
     public static void main(String[] args) {
-        int[] datas = new int[] { 54, 90, 6, 69, 12, 37, 92, 28, 65, 83 };
+        int[] datas = new int[] { 8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15 };
         BinarySearchTree bsTree = new BinarySearchTree();
         for(int i = 0; i < datas.length; i++) {
             bsTree.add(datas[i]);
@@ -140,15 +156,17 @@ public class BinarySearchTree {
         bsTree.inOrder(bsTree.root);
         System.out.println();
 
-        bsTree.search(90);
-        bsTree.search(65);
-        bsTree.search(28);
+        bsTree.search(8);
+        bsTree.search(12);
+        bsTree.search(15);
 
-        bsTree.delete(90);
+        System.out.println("删除节点8");
+        bsTree.delete(8);
+
         System.out.print("中序遍历");
         bsTree.inOrder(bsTree.root);
         System.out.println();
 
-        bsTree.search(90);
+        bsTree.search(8);
     }
 }
