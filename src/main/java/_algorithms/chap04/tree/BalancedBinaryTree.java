@@ -1,35 +1,177 @@
 package _algorithms.chap04.tree;
 
 /**
- * Created by Administrator on 2016/9/23.
+ * 平衡二叉搜索树
+ * Created by autfish on 2016/9/23.
  */
 public class BalancedBinaryTree {
 
     private Node root;
+    private boolean isTaller = false;
 
     public void add(int key) {
         if(root == null) {
             root = new Node(key);
             return;
         }
-        if(searchNode(root, key) == null)
-            addNode(root, new Node(key));
+        addNode(root, new Node(key));
     }
 
     private void addNode(Node parent, Node child) {
+        if(child.data == parent.data) {
+            isTaller = false;
+            return;
+        }
         if(child.data < parent.data) {
             if(parent.leftChild != null) {
                 addNode(parent.leftChild, child);
             } else {
                 parent.leftChild = child;
                 child.parent = parent;
+                isTaller = true;
+            }
+            if(isTaller) {
+                switch(parent.balanceFactor) {
+                    case 1:
+                        adjustLeft(parent);
+                        isTaller = false;
+                        break;
+                    case 0:
+                        parent.balanceFactor = 1;
+                        break;
+                    case -1:
+                        parent.balanceFactor = 0;
+                        isTaller = false;
+                        break;
+                }
             }
         } else {
             if(parent.rightChild != null) {
                 addNode(parent.rightChild, child);
             } else {
                 parent.rightChild = child;
+                child.parent = parent;
+                isTaller = true;
             }
+            if (isTaller) {
+                System.out.println(parent.balanceFactor);
+                switch (parent.balanceFactor) {
+                    case 1:
+                        parent.balanceFactor = 0;
+                        isTaller = false;
+                        break;
+                    case 0:
+                        parent.balanceFactor = -1;
+                        break;
+                    case -1: {
+                        adjustRight(parent);
+                        isTaller = false;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void adjustLeft(Node node) {
+        Node son = node.leftChild;
+        if(son.balanceFactor == 1) {
+            node.balanceFactor = 0;
+            son.balanceFactor = 0;
+            rotateRight(node);
+        } else if(son.balanceFactor == -1) {
+            Node grandson = son.rightChild;
+            switch (grandson.balanceFactor) {
+                case 1:
+                    node.balanceFactor = -1;
+                    son.balanceFactor = 0;
+                    break;
+                case 0:
+                    node.balanceFactor = 0;
+                    son.balanceFactor = 0;
+                    break;
+                case -1:
+                    node.balanceFactor = 0;
+                    son.balanceFactor = 1;
+            }
+            grandson.balanceFactor = 0;
+            rotateLeft(son);
+            rotateRight(node);
+        }
+    }
+
+    private void adjustRight(Node node) {
+        Node son = node.rightChild;
+        if(son.balanceFactor == -1) {
+            node.balanceFactor = 0;
+            son.balanceFactor = 0;
+            rotateLeft(node);
+        } else if(son.balanceFactor == 1) {
+            Node grandson = son.leftChild;
+            switch (grandson.balanceFactor) {
+                case 1:
+                    node.balanceFactor = 0;
+                    son.balanceFactor = -1;
+                    break;
+                case 0:
+                    node.balanceFactor = 0;
+                    son.balanceFactor = 0;
+                    break;
+                case -1:
+                    node.balanceFactor = 1;
+                    son.balanceFactor = 0;
+            }
+            grandson.balanceFactor = 0;
+            rotateRight(son);
+            rotateLeft(node);
+        }
+    }
+
+    private void rotateRight(Node node) {
+        Node child = node.leftChild;
+        Node parent = node.parent;
+
+        node.leftChild = child.rightChild;
+        if(child.rightChild != null) {
+            child.rightChild.parent = node;
+        }
+
+        child.rightChild = node;
+        node.parent = child;
+
+        if (parent == null) {
+            root = child;
+            root.parent = null;
+        } else if (parent.leftChild.data == node.data) {
+            parent.leftChild = child;
+            child.parent = parent;
+        } else {
+            parent.rightChild = child;
+            child.parent = parent;
+        }
+    }
+
+    private void rotateLeft(Node node) {
+        Node child = node.rightChild;
+        Node parent = node.parent;
+
+        node.rightChild = child.leftChild;
+        if(child.leftChild != null) {
+            child.leftChild.parent = node;
+        }
+
+        child.leftChild = node;
+        node.parent = child;
+
+        if (parent == null) {
+            root = child;
+            root.parent = null;
+        } else if (parent.leftChild.data == node.data) {
+            parent.leftChild = child;
+            child.parent = parent;
+        } else {
+            parent.rightChild = child;
+            child.parent = parent;
         }
     }
 
@@ -47,6 +189,15 @@ public class BalancedBinaryTree {
         }
     }
 
+    public void preOrder(Node node) {
+        if(node == null) {
+            return;
+        }
+        System.out.println(node);
+        preOrder(node.leftChild);
+        preOrder(node.rightChild);
+    }
+
     private static class Node {
         Node parent;
         Node leftChild;
@@ -57,5 +208,22 @@ public class BalancedBinaryTree {
         public Node(int data) {
             this.data = data;
         }
+
+        public String toString() {
+            return this.data + "[Parent=" + (this.parent == null ? "Null" : this.parent.data)
+                    + ", LeftChild=" + (this.leftChild == null ? "Null" : this.leftChild.data)
+                    + ", RightChild=" + (this.rightChild == null ? "Null" : this.rightChild.data) + "]";
+        }
+    }
+
+    public static void main(String[] args) {
+        BalancedBinaryTree avlTree = new BalancedBinaryTree();
+        avlTree.add(9);
+        avlTree.add(6);
+        avlTree.add(10);
+        avlTree.add(5);
+        avlTree.add(7);
+        avlTree.add(8);
+        avlTree.preOrder(avlTree.root);
     }
 }

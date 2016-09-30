@@ -20,11 +20,13 @@ public class BinarySearchTree {
             root = new Node(key);
             return;
         }
-        if(searchNode(root, key) == null)
-            addNode(root, new Node(key));
+        addNode(root, new Node(key));
     }
 
     private void addNode(Node parent, Node child) {
+        if(child.data == parent.data) {
+            return;
+        }
         if(child.data < parent.data) {
             if(parent.leftChild != null) {
                 addNode(parent.leftChild, child);
