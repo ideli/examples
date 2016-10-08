@@ -54,7 +54,6 @@ public class BalancedBinaryTree {
                 isTaller = true;
             }
             if (isTaller) {
-                System.out.println(parent.balanceFactor);
                 switch (parent.balanceFactor) {
                     case 1:
                         parent.balanceFactor = 0;
@@ -128,6 +127,7 @@ public class BalancedBinaryTree {
     }
 
     private void rotateRight(Node node) {
+        System.out.println("右旋" + node.data);
         Node child = node.leftChild;
         Node parent = node.parent;
 
@@ -142,7 +142,7 @@ public class BalancedBinaryTree {
         if (parent == null) {
             root = child;
             root.parent = null;
-        } else if (parent.leftChild.data == node.data) {
+        } else if (parent.leftChild != null && parent.leftChild.data == node.data) {
             parent.leftChild = child;
             child.parent = parent;
         } else {
@@ -152,6 +152,7 @@ public class BalancedBinaryTree {
     }
 
     private void rotateLeft(Node node) {
+        System.out.println("左旋" + node.data);
         Node child = node.rightChild;
         Node parent = node.parent;
 
@@ -166,7 +167,7 @@ public class BalancedBinaryTree {
         if (parent == null) {
             root = child;
             root.parent = null;
-        } else if (parent.leftChild.data == node.data) {
+        } else if (parent.leftChild != null && parent.leftChild.data == node.data) {
             parent.leftChild = child;
             child.parent = parent;
         } else {
@@ -218,12 +219,18 @@ public class BalancedBinaryTree {
 
     public static void main(String[] args) {
         BalancedBinaryTree avlTree = new BalancedBinaryTree();
-        avlTree.add(9);
-        avlTree.add(6);
-        avlTree.add(10);
-        avlTree.add(5);
-        avlTree.add(7);
-        avlTree.add(8);
+
+        avlTree.add(100);
+        avlTree.add(90);
+        avlTree.add(110);
+        avlTree.add(80);
+        avlTree.add(95);
+        avlTree.add(120);
+        avlTree.add(75);
+        avlTree.add(85);
+        avlTree.add(97);
+        avlTree.add(96);
+
         avlTree.preOrder(avlTree.root);
     }
 }
